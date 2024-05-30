@@ -1,5 +1,6 @@
 package com.example.memo2405.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.memo2405.databinding.ActivityMainBinding
@@ -15,6 +16,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-
+        binding.apply {
+            fab.setOnClickListener {
+                val intent = Intent(this@MainActivity, MemoActivity::class.java)
+                startActivity(intent)
+            }
+        }
     }
 }
