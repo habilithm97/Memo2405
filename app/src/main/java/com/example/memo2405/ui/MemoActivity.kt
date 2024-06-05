@@ -38,6 +38,14 @@ class MemoActivity : AppCompatActivity() {
                 saveMemo()
             }
         }
+        val intent = intent
+        if(!intent.hasExtra(ID)) { // 추가 모드
+            id = intent.getIntExtra(ID, -1)
+        } else { // 수정 모드
+            id = intent.getIntExtra(ID, -1)
+            binding.edtTitle.setText(intent.getStringExtra(TITLE))
+            binding.edtContent.setText(intent.getStringExtra(CONTENT))
+        }
     }
 
     private fun saveMemo() {
@@ -50,7 +58,13 @@ class MemoActivity : AppCompatActivity() {
             val intent = Intent()
             intent.putExtra(TITLE, title)
             intent.putExtra(CONTENT, content)
-            setResult(INSERT, intent)
+
+            if(id == -1) { // 추가 모드
+                setResult(INSERT, intent)
+            } else { // 수정 모드
+                intent.putExtra(ID, id)
+                setResult(UPDATE, intent)
+            }
             finish()
         }
     }

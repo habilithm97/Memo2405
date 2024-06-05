@@ -3,6 +3,7 @@ package com.example.memo2405.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -11,7 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.memo2405.adapter.MemoAdapter
 import com.example.memo2405.databinding.ActivityMainBinding
 import com.example.memo2405.room.Memo
+import com.example.memo2405.ui.MemoActivity.Companion.CONTENT
+import com.example.memo2405.ui.MemoActivity.Companion.ID
 import com.example.memo2405.ui.MemoActivity.Companion.INSERT
+import com.example.memo2405.ui.MemoActivity.Companion.TITLE
+import com.example.memo2405.ui.MemoActivity.Companion.UPDATE
 import com.example.memo2405.viewmodel.MemoVM
 
 class MainActivity : AppCompatActivity() {
@@ -48,16 +53,40 @@ class MainActivity : AppCompatActivity() {
             val intent = result.data
             if (result.resultCode == INSERT) { // 추가 모드
                 if (intent != null) {
-                    val title = intent.getStringExtra(MemoActivity.TITLE).toString()
-                    val content = intent.getStringExtra(MemoActivity.CONTENT).toString()
+                    val title = intent.getStringExtra(TITLE).toString()
+                    val content = intent.getStringExtra(CONTENT).toString()
                     val memo = Memo(title, content)
                     viewModel.addMemo(memo)
+                }
+            } else if(result.resultCode == UPDATE) { // 수정 모드
+                if(intent != null) {
+                    val id = intent.getIntExtra(ID, -1)
+
+                    if(id == -1) {
+                        return@registerForActivityResult
+                    }
+
+                    val title = intent.getStringExtra(TITLE).toString()
+                    val content = intent.getStringExtra(CONTENT).toString()
+                    val memo = Memo(title, content)
+                    memo.id = id
+                    viewModel.updateMemo(memo)
                 }
             }
         }
         // 리스트를 관찰하여 변경 시 어댑터에 전달함
         viewModel.getAll.observe(this@MainActivity, Observer {
             memoAdapter.submitList(it)
+        })
+
+        memoAdapter.setOnItemClickListener(object : MemoAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, memo: Memo, position: Int) {
+                val intent = Intent(this@MainActivity, MemoActivity::class.java)
+                intent.putExtra(ID, memo.id)
+                intent.putExtra(TITLE, memo.title)
+                intent.putExtra(CONTENT, memo.content)
+                resultLauncher.launch(intent)
+            }
         })
     }
 }
