@@ -18,6 +18,9 @@ import com.example.memo2405.ui.MemoActivity.Companion.INSERT
 import com.example.memo2405.ui.MemoActivity.Companion.TITLE
 import com.example.memo2405.ui.MemoActivity.Companion.UPDATE
 import com.example.memo2405.viewmodel.MemoVM
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
@@ -55,7 +58,9 @@ class MainActivity : AppCompatActivity() {
                 if (intent != null) {
                     val title = intent.getStringExtra(TITLE).toString()
                     val content = intent.getStringExtra(CONTENT).toString()
-                    val memo = Memo(title, content)
+                    val dateFormat = SimpleDateFormat("yyMMdd", Locale.getDefault())
+                    val date = dateFormat.format(Date())
+                    val memo = Memo(title, content, date)
                     viewModel.addMemo(memo)
                 }
             } else if(result.resultCode == UPDATE) { // 수정 모드
@@ -68,7 +73,9 @@ class MainActivity : AppCompatActivity() {
 
                     val title = intent.getStringExtra(TITLE).toString()
                     val content = intent.getStringExtra(CONTENT).toString()
-                    val memo = Memo(title, content)
+                    val dateFormat = SimpleDateFormat("yyMMdd", Locale.getDefault())
+                    val date = dateFormat.format(Date())
+                    val memo = Memo(title, content, date)
                     memo.id = id
                     viewModel.updateMemo(memo)
                 }
