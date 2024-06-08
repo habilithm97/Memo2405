@@ -83,7 +83,9 @@ class MainActivity : AppCompatActivity() {
         }
         // 리스트를 관찰하여 변경 시 어댑터에 전달함
         viewModel.getAll.observe(this@MainActivity, Observer {
-            memoAdapter.submitList(it)
+            memoAdapter.submitList(it) {
+                binding.rv.scrollToPosition(it.size - 1) // 마지막 아이템 위치로 스크롤
+            }
         })
 
         memoAdapter.setOnItemClickListener(object : MemoAdapter.OnItemClickListener {
