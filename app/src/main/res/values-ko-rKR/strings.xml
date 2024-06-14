@@ -7,4 +7,7 @@
     <string name="cancel">취소</string>
     <string name="save">저장</string>
     <string name="empty_title">제목을 입력해 주세요.</string>
+    <string name="dialog_title">삭제하기</string>
+    <string name="dialog_msg">정말로 삭제하시겠습니까?</string>
+    <string name="ok">확인</string>
 </resources>

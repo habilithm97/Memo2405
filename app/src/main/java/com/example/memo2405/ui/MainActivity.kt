@@ -7,8 +7,10 @@ import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.memo2405.R
 import com.example.memo2405.adapter.MemoAdapter
 import com.example.memo2405.databinding.ActivityMainBinding
 import com.example.memo2405.room.Memo
@@ -88,14 +90,29 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        memoAdapter.setOnItemClickListener(object : MemoAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, memo: Memo, position: Int) {
-                val intent = Intent(this@MainActivity, MemoActivity::class.java)
-                intent.putExtra(ID, memo.id)
-                intent.putExtra(TITLE, memo.title)
-                intent.putExtra(CONTENT, memo.content)
-                resultLauncher.launch(intent)
-            }
-        })
+        memoAdapter.apply {
+            setOnItemClickListener(object : MemoAdapter.OnItemClickListener {
+                override fun onItemClick(view: View, memo: Memo, position: Int) {
+                    val intent = Intent(this@MainActivity, MemoActivity::class.java)
+                    intent.putExtra(ID, memo.id)
+                    intent.putExtra(TITLE, memo.title)
+                    intent.putExtra(CONTENT, memo.content)
+                    resultLauncher.launch(intent)
+                }
+            })
+            setOnItemLongClickListener(object : MemoAdapter.OnItemLongClickListener {
+                override fun onItemLongClick(view: View, memo: Memo, position: Int) {
+                    AlertDialog.Builder(this@MainActivity)
+                        .setTitle(R.string.dialog_title)
+                        .setMessage(R.string.dialog_msg)
+                        .setIcon(R.drawable.delete)
+                        .setPositiveButton(R.string.ok) { _, _ ->
+                            viewModel.deleteMemo(memo)
+                        }.setNegativeButton(R.string.cancel) { dialog, _ ->
+                            dialog.dismiss()
+                        }.show()
+                }
+            })
+        }
     }
 }

@@ -16,7 +16,8 @@ import com.example.memo2405.room.Memo
  -> 데이터의 변경 사항을 자동으로 처리하여 효율적으로 목록을 업데이트할 수 있도록 도와줌
  */
 class MemoAdapter : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DiffCallback()) {
-    private lateinit var listener: OnItemClickListener
+    private lateinit var itemClickListener: OnItemClickListener
+    private lateinit var itemLongClickListener: OnItemLongClickListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
         val binding = DataBindingUtil.inflate<ItemMemoBinding>(LayoutInflater.from(parent.context), R.layout.item_memo, parent, false)
@@ -34,7 +35,11 @@ class MemoAdapter : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DiffCallback()
             val position = adapterPosition
             if(position != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
-                    listener.onItemClick(itemView, memo, position)
+                    itemClickListener.onItemClick(itemView, memo, position)
+                }
+                itemView.setOnLongClickListener {
+                    itemLongClickListener.onItemLongClick(itemView, memo, position)
+                    true
                 }
             }
         }
@@ -54,7 +59,15 @@ class MemoAdapter : ListAdapter<Memo, MemoAdapter.MemoViewHolder>(DiffCallback()
         fun onItemClick(view: View, memo: Memo, position: Int)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) { // 리스너 객체 전달
-        this.listener = listener
+    fun setOnItemClickListener(itemClickListener: OnItemClickListener) { // 리스너 객체 전달
+        this.itemClickListener = itemClickListener
+    }
+
+    interface OnItemLongClickListener {
+        fun onItemLongClick(view: View, memo: Memo, position: Int)
+    }
+
+    fun setOnItemLongClickListener(itemLongClickListener: OnItemLongClickListener) {
+        this.itemLongClickListener = itemLongClickListener
     }
 }
