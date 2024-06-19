@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         binding.apply {
             fab.setOnClickListener {
                 val intent = Intent(this@MainActivity, MemoActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 resultLauncher.launch(intent)
             }
             rv.apply {
@@ -97,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     intent.putExtra(ID, memo.id)
                     intent.putExtra(TITLE, memo.title)
                     intent.putExtra(CONTENT, memo.content)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     resultLauncher.launch(intent)
                 }
             })
