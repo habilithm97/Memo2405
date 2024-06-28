@@ -3,6 +3,8 @@ package com.example.memo2405.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +32,8 @@ class MainActivity : AppCompatActivity() {
     private val memoAdapter by lazy { MemoAdapter() }
     private val viewModel: MemoVM by viewModels()
 
+    private var menuVisible = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -52,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 setHasFixedSize(true) // 고정된 사이즈의 RecyclerView -> 불필요한 리소스 줄이기
                 adapter = memoAdapter
             }
+            setSupportActionBar(toolbar)
         }
 
         resultLauncher = registerForActivityResult(
@@ -115,6 +120,42 @@ class MainActivity : AppCompatActivity() {
                         }.show()
                 }
             })
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.let { // menu가 null이 아니면 실행
+            val selectAll = it.findItem(R.id.selectAll)
+            val delete = it.findItem(R.id.delete)
+            val cancel = it.findItem(R.id.cancel)
+            val select = it.findItem(R.id.select)
+
+            selectAll.isVisible = menuVisible
+            delete.isVisible = menuVisible
+            cancel.isVisible = menuVisible
+            select.isVisible = !menuVisible
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.select -> {
+                menuVisible = true
+                invalidateOptionsMenu()
+                true
+            }
+            R.id.cancel -> {
+                menuVisible = false
+                invalidateOptionsMenu()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

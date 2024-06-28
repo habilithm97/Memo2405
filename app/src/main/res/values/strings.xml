@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Memo2405</string>
+    <string name="app_name">Memo</string>
 
     <string name="title">Title</string>
     <string name="content">Content</string>
@@ -9,4 +9,7 @@
     <string name="dialog_title">Delete</string>
     <string name="dialog_msg">Are you sure you want to delete it?</string>
     <string name="ok">Ok</string>
+    <string name="select">Select</string>
+    <string name="select_all">Select All</string>
+    <string name="delete">Delete</string>
 </resources>

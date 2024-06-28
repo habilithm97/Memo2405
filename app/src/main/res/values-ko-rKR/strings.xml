@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">메모2405</string>
+    <string name="app_name">메모</string>
 
     <string name="title">제목</string>
     <string name="content">내용</string>
@@ -10,4 +10,7 @@
     <string name="dialog_title">삭제하기</string>
     <string name="dialog_msg">정말로 삭제하시겠습니까?</string>
     <string name="ok">확인</string>
+    <string name="select">선택</string>
+    <string name="select_all">전체 선택</string>
+    <string name="delete">삭제</string>
 </resources>
